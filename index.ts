@@ -3,5 +3,5 @@ import createRouter from "./router.js";
 
 export default createRouter;
 
-export { createRouter, Options };
+export { createRouter };
 export const router: (options?: Options) => Promise<Router> = (options: Options = {}) => createRouter(Router(), options);
