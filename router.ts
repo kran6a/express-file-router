@@ -7,17 +7,7 @@ import { getMethodKey } from "./utils.js";
 
 const REQUIRE_MAIN_FILE: string = dirname(process.cwd());
 
-/**
- * Attach routes to an Express app or router instance
- *
- * ```ts
- * createRouter(app)
- * ```
- *
- * @param app An express app or router instance
- * @param options An options object (optional)
- */
-const createRouter = async (app: Router, options: Options = { afterware: []}): Promise<Router>=>{
+const createRouter = async (app: Router, {afterware = [], ...options}: Options = {afterware: []}): Promise<Router>=>{
     const files: ParsedFile[] = walkTree(options.directory || join(REQUIRE_MAIN_FILE, "routes"));
     const routes: Route[] = await generateRoutes(files);
 
@@ -30,7 +20,7 @@ const createRouter = async (app: Router, options: Options = { afterware: []}): P
                 continue;
 
             const wrapper_handler = async (req: Request, res: Response): Promise<void>=>{
-                const {body = '', headers = {}, status = 500}: Endpoint_Response = await options.afterware.reduce(async (acc, cur)=>{
+                const {body = '', headers = {}, status = 500}: Endpoint_Response = await afterware.reduce(async (acc, cur)=>{
                     if ((<Promise<Endpoint_Response>>acc)?.then)
                         return (<Promise<Endpoint_Response>>acc).then((response: Endpoint_Response)=>{
                             const {body = '', headers = {}, status = 500}: Endpoint_Response = cur(response);
