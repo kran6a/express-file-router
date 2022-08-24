@@ -1,6 +1,7 @@
 import {readdirSync, statSync} from "fs";
 import {join, normalize, parse, resolve} from "path";
 import {convertParamSyntax, isFileIgnored, mergePaths} from "./utils.js";
+import type {ParsedFile, Route} from "./global";
 
 const is_windows: boolean = process.platform === 'win32';
 /**
