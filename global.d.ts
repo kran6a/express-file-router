@@ -22,12 +22,9 @@ export type Route = {
         [x: string]: Endpoint
     }
 }
-
-declare global {
-    type Endpoint = ({params, request, url}: { params: Partial<{ [x: string]: string }>, request: Request, url: URL }) => Endpoint_Response | Promise<Endpoint_Response>
-    type Endpoint_Response = {
-        status: number,
-        headers?: Record<string, string | number>,
-        body?: string | Uint8Array
-    }
+export type Endpoint = ({params, request, url}: { params: Partial<{ [x: string]: string }>, request: Request, url: URL }) => Endpoint_Response | Promise<Endpoint_Response>
+export type Endpoint_Response = {
+    status: number,
+    headers?: Record<string, string | number>,
+    body?: string | Uint8Array
 }

@@ -1,7 +1,7 @@
 import {dirname, join} from "path";
 import config from "./config.js";
 import type {Request, Response, Router} from "express";
-import type {ParsedFile, Options, Route} from "./global";
+import type {ParsedFile, Options, Route, Endpoint_Response} from "./global";
 
 import { generateRoutes, walkTree } from "./lib.js";
 import { getMethodKey } from "./utils.js";
