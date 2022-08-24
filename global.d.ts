@@ -22,7 +22,7 @@ export type Route = {
         [x: string]: Endpoint
     }
 }
-export type Endpoint = ({params, request, url}: { params: Partial<{ [x: string]: string }>, request: Request, url: URL }) => Endpoint_Response | Promise<Endpoint_Response>
+export type Endpoint = <T>({params, request, url, middleware}: { params: Partial<{ [x: string]: string }>, request: Request, url: URL, middleware: Record<string, T> }) => Endpoint_Response | Promise<Endpoint_Response>
 export type Endpoint_Response = {
     status: number,
     headers?: Record<string, string | number>,
