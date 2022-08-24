@@ -7,19 +7,19 @@ declare global {
         headers?: Record<string, string | number>,
         body?: string | Uint8Array
     }
-    export type Options = {
+    type Options = {
         directory?: string
         additionalMethods?: string[],
         afterware?: ((response: Endpoint_Response) => Endpoint_Response)[]
     }
 
-    export type ParsedFile = {
+    type ParsedFile = {
         name: string
         path: string
         rel: string
     }
 
-    export type Route = {
+    type Route = {
         url: string
         exports: {
             all?: Endpoint
@@ -32,5 +32,3 @@ declare global {
         }
     }
 }
-
-export {};
