@@ -1,7 +1,7 @@
 import {Router} from "express";
-import createRouter from "./router.js";
+import create_router from "./router.js";
 
-export default createRouter;
+export default create_router;
 
-export { createRouter };
-export const router: (options?: Options) => Promise<Router> = (options: Options = {}) => createRouter(Router(), options);
+export { create_router, Endpoint, Endpoint_Response };
+export const router: (options?: Options) => Promise<Router> = (options: Options = {}) => create_router(Router(), options);
