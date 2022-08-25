@@ -10,11 +10,13 @@ export const router: (options?: Options) => Promise<Router> = (options: Options 
 
 type Middleware<Original extends Record<string, Record<string, any>> = Record<string, undefined>, New extends Record<string, Record<string, any>> = Record<string, undefined>> = (a: Parameters<Endpoint<Original>>["0"])=>Parameters<Endpoint<New>>["0"] | Promise<Parameters<Endpoint<New>>["0"]>;
 
-export const beforeware: <Original extends Record<string, Record<string, any>> = Record<string, undefined>, New extends Record<string, Record<string, any>> = Record<string, undefined>>(mw: Middleware<Original, New>) => (route: Endpoint<New>) => Endpoint<New> = <Original extends Record<string, Record<string, any>> = Record<string, undefined>, New extends Record<string, Record<string, any>> = Record<string, undefined>>(mw)=>{
+export const beforeware: <Original extends Record<string, Record<string, any>> = Record<string, {}>, New extends Record<string, Record<string, any>> = Record<string, undefined>>(mw: Middleware<Original, New>) => (route: Endpoint<New>) => Endpoint<New> = <Original extends Record<string, Record<string, any>> = Record<string, undefined>, New extends Record<string, Record<string, any>> = Record<string, undefined>>(mw)=>{
     return (route: Endpoint<New>)=>{
         return async (params: Parameters<Endpoint<Original>>["0"]) => {
-            const overriden_params: Parameters<Endpoint<New>>["0"] = await mw(params);
-            return route(overriden_params);
+            const overriden_params: Parameters<Endpoint<New>>["0"] | Endpoint_Response = await mw(params);
+            if (typeof overriden_params["status"] === "number" || overriden_params["body"] !== undefined)
+                return <Endpoint_Response>overriden_params;
+            return route(<Parameters<Endpoint<New>>["0"]>overriden_params);
         }
     }
 }
