@@ -31,7 +31,7 @@ const createRouter = async (app: Router, {afterware = [], ...options}: Options =
                             return {body: (<Endpoint_Response>acc).body || body, headers: {...(<Endpoint_Response>acc).headers, ...headers}, status: status || (<Endpoint_Response>acc).status};
                         });
                     const {body = '', headers = {}, status = 500}: Endpoint_Response = cur(<Endpoint_Response>acc);
-                    return {body: (<Endpoint_Response>acc).body || body, headers: {...(<Endpoint_Response>acc).headers, ...headers}, status: status || (<Endpoint_Response>acc).status};
+                    return {body: (<Endpoint_Response>acc).body || body, headers: {...((<Endpoint_Response>acc).headers || {}), ...headers}, status: status || (<Endpoint_Response>acc).status};
                 }, handler({request: req, params: req.params, middleware: {}, url: new URL('http://localhost'+req.originalUrl)}));
                 res.status(status || 500);
                 Object.entries(headers).forEach(([key, value])=>res.setHeader(key, value));
