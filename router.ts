@@ -3,6 +3,7 @@ import config from "./config.js";
 import type {Request, Response, Router} from "express";
 import type {ParsedFile, Options, Route, Endpoint_Response} from "./global";
 import {Readable} from 'node:stream';
+import type {ReadableStream} from 'node:stream/web';
 
 import { generateRoutes, walkTree } from "./lib.js";
 import { getMethodKey } from "./utils.js";
@@ -21,7 +22,7 @@ const createRouter = async (app: Router, {afterware = [], ...options}: Options =
             if (!options.additionalMethods?.includes(methodKey) && !config.DEFAULT_METHOD_EXPORTS.includes(methodKey))
                 continue;
 
-            const wrapper_handler = async (req: Request, res: Response): Promise<void>=>{
+            const wrapper_handler = async (req: Request & {body: ReadableStream}, res: Response): Promise<void>=>{
                 req.body = Readable.toWeb(req);
                 const {body = '', headers = {}, status = 500}: Endpoint_Response = await afterware.reduce(async (acc, cur)=>{
                     if ((<Promise<Endpoint_Response>>acc)?.then)
