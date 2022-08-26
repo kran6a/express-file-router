@@ -2,6 +2,7 @@ import {dirname, join} from "path";
 import config from "./config.js";
 import type {Request, Response, Router} from "express";
 import type {ParsedFile, Options, Route, Endpoint_Response} from "./global";
+import {Readable} from 'node:stream';
 
 import { generateRoutes, walkTree } from "./lib.js";
 import { getMethodKey } from "./utils.js";
@@ -21,6 +22,7 @@ const createRouter = async (app: Router, {afterware = [], ...options}: Options =
                 continue;
 
             const wrapper_handler = async (req: Request, res: Response): Promise<void>=>{
+                req.body = Readable.toWeb(req);
                 const {body = '', headers = {}, status = 500}: Endpoint_Response = await afterware.reduce(async (acc, cur)=>{
                     if ((<Promise<Endpoint_Response>>acc)?.then)
                         return (<Promise<Endpoint_Response>>acc).then((response: Endpoint_Response)=>{
