@@ -23,7 +23,8 @@ const createRouter = async (app: Router, {afterware = [], ...options}: Options =
                 continue;
 
             const wrapper_handler = async (req: ExpressRequest & {body: ReadableStream}, res: Response): Promise<void>=>{
-                const native_request = new Request(req.url, {body: Readable.toWeb(req), headers: <Record<string, string>>req.headers});
+                const url: URL = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
+                const native_request = new Request(url, {body: Readable.toWeb(req), headers: <Record<string, string>>req.headers});
                 const {body = '', headers = {}, status = 500}: Endpoint_Response = await afterware.reduce(async (acc, cur)=>{
                     if ((<Promise<Endpoint_Response>>acc)?.then)
                         return (<Promise<Endpoint_Response>>acc).then((response: Endpoint_Response)=>{
@@ -32,7 +33,7 @@ const createRouter = async (app: Router, {afterware = [], ...options}: Options =
                         });
                     const {body = '', headers = {}, status = 500}: Endpoint_Response = cur(<Endpoint_Response>acc);
                     return {body: (<Endpoint_Response>acc).body || body, headers: {...((<Endpoint_Response>acc).headers || {}), ...headers}, status: status || (<Endpoint_Response>acc).status};
-                }, handler({request: native_request, params: req.params, middleware: {}, url: new URL(req.url)}));
+                }, handler({request: native_request, params: req.params, middleware: {}, url}));
                 res.status(status || 500);
                 Object.entries(headers).forEach(([key, value])=>res.setHeader(key, value));
                 res.send(body);
