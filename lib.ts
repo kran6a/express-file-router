@@ -20,7 +20,7 @@ export const walkTree = (directory: string, tree: string[] = []) => {
 
 export const generateRoutes = async (files: ParsedFile[]): Promise<Route[]>=>{
     return Promise.all(files.map(async (file): Promise<Route> => {
-        const parsedFile = parse(file.rel)
+        const parsedFile = parse(file.rel);
 
         if (isFileIgnored(parsedFile))
             return undefined;
