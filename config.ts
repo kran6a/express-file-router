@@ -1,6 +1,6 @@
 const config = {
     VALID_FILE_EXTENSIONS: [".ts", ".mts", ".js", ".mjs"],
-    IGNORED_FILE_EXTENSIONS: [".spec"],
+    IGNORED_FILE_EXTENSIONS: [".spec.ts", '.spec.js'],
     IGNORE_PREFIX_CHAR: "_",
     DEFAULT_METHOD_EXPORTS: [
         "all",
