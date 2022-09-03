@@ -19,7 +19,7 @@ export const walkTree = (directory: string, tree: string[] = []) => {
 }
 
 export const generateRoutes = async (files: ParsedFile[]): Promise<Route[]>=>{
-    return Promise.all(files.map(async (file): Promise<Route> => {
+    return (await Promise.all(files.map(async (file): Promise<Route> => {
         const parsedFile = parse(file.rel);
 
         if (isFileIgnored(parsedFile))
@@ -31,5 +31,5 @@ export const generateRoutes = async (files: ParsedFile[]): Promise<Route[]>=>{
         const url: string = convertParamSyntax(directory + name);
         const exports: Route["exports"] = await import((is_windows ? 'file://' : '') + normalize(resolve(join(file.path, file.name))));
         return {url, exports};
-    }));
+    }))).filter(x=>x!==undefined);
 }

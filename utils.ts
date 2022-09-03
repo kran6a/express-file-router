@@ -6,7 +6,7 @@ import config from "./config.js";
  *
  * @returns Boolean Whether or not the file has to be excluded from route generation
  */
-export const isFileIgnored = (parsedFile: ParsedPath) =>config.IGNORED_FILE_EXTENSIONS.some(x=>parsedFile.name.includes(x) || parsedFile.ext === x) || !config.VALID_FILE_EXTENSIONS.includes(parsedFile.ext.toLowerCase()) || parsedFile.name.startsWith(config.IGNORE_PREFIX_CHAR) || parsedFile.dir.startsWith(`/${config.IGNORE_PREFIX_CHAR}`);
+export const isFileIgnored = (parsedFile: ParsedPath) =>config.IGNORED_FILE_EXTENSIONS.some(x=>parsedFile.base.endsWith(x)) || !config.VALID_FILE_EXTENSIONS.includes(parsedFile.ext.toLowerCase()) || parsedFile.name.startsWith(config.IGNORE_PREFIX_CHAR) || parsedFile.dir.startsWith(`/${config.IGNORE_PREFIX_CHAR}`);
 /**
  * ```ts
  * mergePaths("/posts/[id]", "index.ts") -> "/posts/[id]/index.ts"
