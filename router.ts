@@ -24,7 +24,9 @@ const createRouter = async (app: Router, {afterware = [], ...options}: Options =
 
             const wrapper_handler = async (req: ExpressRequest & {body: ReadableStream}, res: Response): Promise<void>=>{
                 const url: URL = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
-                const native_request = new Request(url, {body: Readable.toWeb(req), method: req.method, headers: <Record<string, string>>req.headers});
+                const method: string = req.method;
+                const has_body: boolean = method !== "get" && method !== "head";
+                const native_request = new Request(url, {body: has_body ? Readable.toWeb(req) : undefined, method: req.method, headers: <Record<string, string>>req.headers});
                 const {body = '', headers = {}, status = 500}: Endpoint_Response = await afterware.reduce(async (acc, cur)=>{
                     if ((<Promise<Endpoint_Response>>acc)?.then)
                         return (<Promise<Endpoint_Response>>acc).then((response: Endpoint_Response)=>{
